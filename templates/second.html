@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Секретная зона</title>
+    <style>
+        body {
+            /* Фоновая картинка */
+            /* Вместо url_for просто вставляем ссылку в кавычках */
+
+           background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("https://i.pinimg.com/1200x/4d/a0/ff/4da0ff2884e9a616761e3a27baaa20ba.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .secret-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+        }
+
+        h1 {
+    color: #800000; /* Глубокий бордовый цвет */
+    font-size: 3em;
+    margin-bottom: 10px;
+    /* Добавим легкое темное свечение, чтобы на темном фоне текст не терялся */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+        .back-button {
+            color: white;
+            text-decoration: none;
+            border: 1px solid white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            transition: 0.3s;
+            margin-top: 30px;
+            display: inline-block;
+        }
+        .back-button:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+            /* 1. Добавляем само правило анимации */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 2. Применяем анимацию к заголовку и кнопке */
+    h1 {
+        color: #800000; /* Ваш бордовый цвет */
+        font-size: 3em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+        animation: fadeInUp 1.5s ease-out; /* Анимация для заголовка */
+    }
+
+    p { animation: fadeInUp 2s ease-out; }
+    .back-button { animation: fadeInUp 2.5s ease-out; }
+
+    </style>
+</head>
+<body>
+
+    <div class="secret-box">
+        <h1>Секретный раздел</h1>
+        <p>Добро пожаловать в скрытую часть сайта kripta.</p>
+        <p>Вы перешли!</p>
+<a href="/" class="back-button">← Вернуться на главную</a>
+
+        <a href="/third_page" class="back-button">Перейти в PaintArt →</a>
+    </div>
+<div class="auth-sidebar">
+    <h3>Авторизация</h3>
+    <!-- Кнопка в стиле Google -->
+    <a href="https://google.com" class="google-btn">
+        <img src="https://wikimedia.org" alt="">
+        Войти через Google
+    </a>
+</div>
+
+<!-- Добавьте эти стили в блок <style> -->
+<style>
+    .auth-sidebar {
+        position: fixed;
+        right: 50px; /* Располагаем справа */
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(15px);
+        padding: 40px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+    }
+
+    .google-btn {
+        background: white;
+        color: #444 ;
+        padding: 20px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        transition: 0.3s;
+    }
+.google-btn img { width: 20px; }
+    .google-btn:hover { background: #f1f1f1; transform: scale(1.05); }
+</style>
+
+
+</>
+</html>

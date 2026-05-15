@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Kripta PaintArt</title>
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/736x/ec/9e/cd/ec9ecd5f4740d22a00520ed53034fe25.jpg');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        canvas {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            cursor: crosshair;
+            margin: 20px;
+        }
+        .toolbar {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .clear-btn { background: #e74c3c; color: white; }
+        .clear-btn:hover { background: #c0392b; }
+        input[type="color"] { border: none; width: 40px; height: 40px; cursor: pointer; background: none; }
+    </style>
+</head>
+<body>
+    <h1> 🕸️Kripta PaintArt🕸️ </h1>
+
+    <div  class="toolbar">
+    <div class="tool-group">
+        <label>Цвет:</label>
+        <input type="color" id="colorPicker" value="#800000">
+    </div>
+
+    <div class="tool-group">
+        <button class="tool-btn active" id="penTool" onclick="setTool('pen')">🖌️ Кисть</button>
+        <button class="tool-btn" id="eraserTool" onclick="setTool('eraser')">🧽 Ластик</button>
+        <button class="tool-btn" id="bucketTool" onclick="setTool('bucket')">🪣 Ведро</button>
+        <button class="tool-btn" id="pickerTool" onclick="setTool('picker')">🧪 Пипетка</button>
+    </div>
+
+    <div class="tool-group">
+        <label>Толщина:</label>
+        <input type="range" id="lineWidth" min="1" max="50" value="5">
+    </div>
+
+    <button class="save-btn" onclick="saveImage()">💾 Сохранить</button>
+    <button class="clear-btn" onclick="clearCanvas()">🗑️ Очистить</button>
+    <a href="/second_page" class="exit-link">← Назад</a>
+</>
+
+    </div>
+
+    <canvas id="paintCanvas" width="800" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+const colorPicker = document.getElementById('colorPicker');
+const lineWidth = document.getElementById('lineWidth');
+
+let painting = false;
+let currentTool = 'pen';
+
+// Переключение инструментов
+function setTool(tool) {
+    currentTool = tool;
+    document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tool + 'Tool').classList.add('active');
+}
+
+function startPosition(e) {
+    if (currentTool === 'bucket') {
+        fillCanvas(e);
+        return;
+    }
+    if (currentTool === 'picker') {
+        pickColor(e);
+        return;
+    }
+    painting = true;
+    draw(e);
+}
+
+function draw(e) {
+    if (!painting) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineWidth = lineWidth.value;
+    ctx.lineCap = 'round';
+
+    // Если ластик — красим белым (цветом фона)
+    ctx.strokeStyle = (currentTool === 'eraser') ? '#ffffff' : colorPicker.value;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+// Пипетка (берет цвет пикселя)
+function pickColor(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor(e.clientX - rect.left);
+    const y = Math.floor(e.clientY - rect.top);
+    const pixel = ctx.getImageData(x, y, 1, 1).data;
+    const hex = "#" + ("000000" + ((pixel[0] << 16) | (pixel[1] << 8) | pixel[2]).toString(16)).slice(-6);
+    colorPicker.value = hex;
+    setTool('pen'); // После выбора цвета возвращаемся к кисти
+}
+
+// Ведро (заливка всего холста текущим цветом)
+function fillCanvas() {
+    ctx.fillStyle = colorPicker.value;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+// Сохранение рисунка
+function saveImage() {
+    const link = document.createElement('a');
+    link.download = 'kripta-art.png';
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+canvas.addEventListener('mousedown', startPosition);
+canvas.addEventListener('mouseup', () => { painting = false; ctx.beginPath(); });
+canvas.addEventListener('mousemove', draw);
+
+    </script>
+</body>
+</html>
